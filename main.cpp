@@ -40,19 +40,19 @@ float bicubicInterpolate(float p[4][4], float x1,float x2,float x3,float x4, flo
     return result;
 }
 
-//浮点转uchar
+//float to uchar
 uchar saturate_cast_float_to_uchar(float val) {
-    int iVal = val + 0.5f; // 加0.5实现四舍五入
+    int iVal = val + 0.5f; // round up
     if (iVal < 0) return 0;
     if (iVal > 255) return 255;
-    return iVal; // 直接赋值，隐式转换为 uchar
+    return iVal; // Direct assignment, implicitly converted to uchar.
 }
 
 Vec3b getBicubicInterpolatedPixel(const Mat& img, float x, float y) {
     Vec3b result;
-    float arr[4][4]; // 用于存储周围 16 个像素的值，这些值将用于插值计算
+    float arr[4][4]; // Used to store the values of the surrounding 16 pixels, which will be used for interpolation calculations
 
-    int ix = floor(x); //ix 和 iy 是 x 和 y 坐标的整数部分
+    int ix = floor(x); //ix and iy are the integer parts of the x and y coordinates.
     int iy = floor(y);
 
     for (int m = 0; m < 3; m++) {
@@ -71,7 +71,7 @@ Vec3b getBicubicInterpolatedPixel(const Mat& img, float x, float y) {
 Mat resizeBicubic(const Mat& input, int newWidth, int newHeight) {
     Mat output(newHeight, newWidth, input.type());
 
-    float x_ratio = float(input.cols - 1) / newWidth;//计算的是原始图像和新图像在水平和垂直方向上的缩放比例
+    float x_ratio = float(input.cols - 1) / newWidth;//Calculated as the horizontal and vertical scaling
     float y_ratio = float(input.rows - 1) / newHeight;
     cout << "width:" << input.cols << endl;
     cout << "height:" << input.rows << endl;
@@ -108,16 +108,16 @@ int main() {
     
     Mat grayImage;
     cvtColor(resized, grayImage, COLOR_BGR2GRAY);
-    // 创建一个 4x4 的矩阵来存储像素值
+    // Create a 4x4 matrix to store the pixel values
     vector<vector<uchar>> pixelMatrix1(4, vector<uchar>(4));
 
-    // 填充矩阵
+    // Fill Matrix
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
             pixelMatrix1[i][j] = grayImage.at<uchar>(aimed_area_width + i, aimed_area_height + j);
         }
     }
-    // 打印特定区域的灰度值
+    // Prints grayscale values for specific areas
     cout << "4x4 grey value(without opencv function):" << endl;
     for (int i = aimed_area_width; i < aimed_area_width+4; i++) {
         for (int j = aimed_area_height; j < aimed_area_height+4; j++) {
@@ -137,7 +137,7 @@ int main() {
 //        }
 //    }
     
-    //用opencv bicubic函数
+    //use opencv bicubic function
     Mat resizedWithOpenCV;
     resize(img, resizedWithOpenCV, Size(1024, 720), 0, 0, INTER_CUBIC);
     namedWindow("Resized by opencv function image", WINDOW_AUTOSIZE);
@@ -153,19 +153,19 @@ int main() {
 //                 << "R=" << int(pixel[2]) << endl;
 //        }
 //    }
-    // 将图像转换为灰度图
+    // convert to greysacle
     Mat grayImageOpencv;
     cvtColor(resizedWithOpenCV, grayImageOpencv, COLOR_BGR2GRAY);
-    // 创建一个 4x4 的矩阵来存储像素值
+    // create a 4x4 matrix
     vector<vector<uchar>> pixelMatrix(4, vector<uchar>(4));
 
-    // 填充矩阵
+    // fill matrix
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
             pixelMatrix[i][j] = grayImageOpencv.at<uchar>(aimed_area_width + i, aimed_area_height + j);
         }
     }
-    // 打印灰度值
+    // print greyscale
     cout << "4x4 grey value(opencv function):" << endl;
     for (int i = aimed_area_width; i < aimed_area_width+4; i++) {
         for (int j = aimed_area_height; j < aimed_area_height+4; j++) {
@@ -173,13 +173,13 @@ int main() {
         }
         cout << endl;
     }
-    // 保存经过双三次插值调整大小的图像
+    // save
     bool isSaved = imwrite("/Users/guoyijun/Desktop/resized_bicubic.jpg", resized);
     if (!isSaved) {
         cout << "Failed to save the bicubic resized image" << endl;
     }
 
-    // 保存使用 OpenCV 函数调整大小的图像
+    // save
     isSaved = imwrite("/Users/guoyijun/Desktop/resized_with_opencv.jpg", resizedWithOpenCV);
     if (!isSaved) {
         cout << "Failed to save the OpenCV resized image" << endl;
