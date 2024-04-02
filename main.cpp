@@ -93,7 +93,7 @@ int main() {
     int aimed_area_width = 700;
     int aimed_area_height= 300;
     
-    Mat img = imread("/Users/guoyijun/Desktop/mozu1.jpg");
+    Mat img = imread("/path/to/mozu1.jpg");
     if (img.empty()) {
         cout << "Could not open or find the image" << endl;
         return -1;
@@ -174,13 +174,13 @@ int main() {
         cout << endl;
     }
     // save
-    bool isSaved = imwrite("/Users/guoyijun/Desktop/resized_bicubic.jpg", resized);
+    bool isSaved = imwrite("/path/to/resized_bicubic.jpg", resized);
     if (!isSaved) {
         cout << "Failed to save the bicubic resized image" << endl;
     }
 
     // save
-    isSaved = imwrite("/Users/guoyijun/Desktop/resized_with_opencv.jpg", resizedWithOpenCV);
+    isSaved = imwrite("/path/to/resized_with_opencv.jpg", resizedWithOpenCV);
     if (!isSaved) {
         cout << "Failed to save the OpenCV resized image" << endl;
     }
